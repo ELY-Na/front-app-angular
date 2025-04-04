@@ -1,0 +1,33 @@
+h1 {
+  display: flex;
+  justify-content: center;
+}
+
+.button-style {
+  margin: 2% 5.5%;
+  background-color: white;
+  border: 2px solid #ddd;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.p-info {
+  display: flex;
+  justify-content: space-around;
+  
+  p {
+    margin: 10px 30px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    border: 2px solid #ddd;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+  }
+}

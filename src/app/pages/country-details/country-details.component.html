@@ -1,0 +1,25 @@
+<section class="relative text-white h-screen flex items-center justify-center bg-cover bg-center col-sm-12">
+  <div class="">
+    <button (click)="goBack()" class="button-style bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-700">
+      ⬅ Back
+    </button>
+  </div>
+  <div *ngIf=" countryDetails$ | async as country " class="bg-black bg-opacity-50 p-8 rounded-lg max-w-3xl w-full text-center flex flex-col items-center">
+    <h1 class="text-2xl font-bold"> {{country.country}}'s Details</h1>
+    <div class="p-info">
+      <div *ngIf=" numberOfEntriesForCountry$ | async as nbEntries ">
+        <p>Number of Entries: {{ nbEntries }}</p>
+      </div>
+      <div *ngIf=" numberOfAthletes$ | async as nbAthlete ">
+        <p>Total number of athletes: {{ nbAthlete }}</p>
+      </div>
+      <div *ngIf=" numberOfMedals$ | async as nbMedals ">
+        <p>Total number of medals: {{ nbMedals }}</p>
+      </div>
+    </div>
+    <p></p>
+  </div>
+</section>
+<app-country-chart *ngIf="(countryDetails$ | async) as country" [country]="country"></app-country-chart>
+
+
