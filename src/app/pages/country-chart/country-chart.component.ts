@@ -17,20 +17,20 @@ export class CountryChartComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     console.log("Pays reçu dans CountryChartComponent :", this.country);
-    console.log("📊 Pays reçu dans CountryChartComponent :", this.country);
     if (this.country) {
       this.createCountryChart();
+      window.addEventListener('resize', this.onResize.bind(this));
     }
   }
 
+  
   createCountryChart(): void {
     const ctx = document.getElementById('countryChart') as HTMLCanvasElement;
-
-    // Trouver la valeur maximale des médaille et calculer la dizaine supérieure
+    
+    // Trouver la valeur maximale des médaille et calculer la dizaine supérieure pour meilleure lisibilité
     const maxMedalsCount = Math.max(...this.country.participations.map(p => p.medalsCount));
     const maxY = Math.ceil(maxMedalsCount / 10) * 10;  // Arrondir à la dizaine supérieure
-    const sizeChart = Math.max(10, window.innerWidth * 0.016)
-
+    
     this.lineChart = new Chart(ctx, {
       
       type: 'line',
@@ -44,15 +44,6 @@ export class CountryChartComponent implements AfterViewInit, OnDestroy {
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: {
-            labels: {
-              font: {
-                size: sizeChart,
-              }
-            }
-          }
-        },
         scales: {
           y: {
             beginAtZero: true, // L'axe des Y commence à zéro
@@ -63,11 +54,17 @@ export class CountryChartComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+
+  onResize() {
+    const sizeChart = Math.max(12, window.innerWidth * 0.015);
+    this.lineChart.options.plugins!.legend!.labels!.font = {
+      size: sizeChart
+    };
+    this.lineChart.update();
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe(); // Désabonnement propre
     console.log('ChartComponent détruit, abonnement nettoyé.');
   }
 }
-
-
-

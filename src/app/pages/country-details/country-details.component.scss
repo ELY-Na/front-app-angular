@@ -22,12 +22,17 @@ h1 {
   
   p {
     margin: 10px 30px;
-    display: flex;
     align-items: center;
     text-align: center;
     border: 2px solid #ddd;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     padding: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  .p-info {
+    display: grid;
   }
 }
