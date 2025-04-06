@@ -27,12 +27,12 @@ export class ChartComponent implements OnInit, OnDestroy {
     this.olympicService.getOlympicData().pipe(take(1)).subscribe(({ labels, data, ids }) => {
       console.log('create chart')
       this.createChart(labels, data, ids); // Passe les données au graphique
+      window.addEventListener('resize', this.onResize.bind(this));
     });
   }
 
   // Chart home page
   createChart(labels: string[], values: number[], ids: number[]) {
-    const sizeChart = Math.max(10, window.innerWidth * 0.016)
     this.chart = new Chart(this.myChart.nativeElement, {
       type: 'pie',  // this.chartType as ChartType
       data: {
@@ -49,15 +49,6 @@ export class ChartComponent implements OnInit, OnDestroy {
         layout: {
           padding: 20
         },
-        plugins: {
-          legend: {
-            labels: {
-              font: {
-                size: sizeChart,
-              }
-            }
-          }
-        },
         onClick: (event, elements) => {
           if (elements.length > 0) {
             const index = elements[0].index;
@@ -71,6 +62,15 @@ export class ChartComponent implements OnInit, OnDestroy {
       }
     })
   };
+
+  // Forcer le resize en fonction de la taille de l'écran car l'ajout de la font-size dans les options de chart.js oblige le rechargement de la page pour prendre en compte la nouvelle font-size en fonction de la taolle de l'écran
+  onResize() {
+    const sizeChart = Math.max(12, window.innerWidth * 0.015);
+    this.chart.options.plugins!.legend!.labels!.font = {
+      size: sizeChart
+    };
+    this.chart.update();
+  }
 
   navigateToCountry(countryId: number) {
     console.log("🚀 Redirection vers la page de détails du pays avec l'ID :", countryId);
