@@ -23,7 +23,6 @@ export class CountryChartComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  
   createCountryChart(): void {
     const ctx = document.getElementById('countryChart') as HTMLCanvasElement;
     
@@ -32,7 +31,6 @@ export class CountryChartComponent implements AfterViewInit, OnDestroy {
     const maxY = Math.ceil(maxMedalsCount / 10) * 10;  // Arrondir à la dizaine supérieure
     
     this.lineChart = new Chart(ctx, {
-      
       type: 'line',
       data: {
         labels: this.country.participations.map(p => p.year.toString()), // Années
@@ -44,6 +42,15 @@ export class CountryChartComponent implements AfterViewInit, OnDestroy {
       },
       options: {
         responsive: true,
+        plugins:{
+          legend: {
+            labels: {
+              font: {
+                size: 20
+              }
+            }
+          }
+        },
         scales: {
           y: {
             beginAtZero: true, // L'axe des Y commence à zéro
@@ -53,7 +60,6 @@ export class CountryChartComponent implements AfterViewInit, OnDestroy {
       }
     });
   }
-
 
   onResize() {
     const sizeChart = Math.max(12, window.innerWidth * 0.015);

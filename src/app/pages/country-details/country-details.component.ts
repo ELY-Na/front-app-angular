@@ -32,47 +32,43 @@ export class CountryDetailsComponent implements OnInit, OnDestroy{
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.olympicService.getNumberOfParticipations().pipe(
-      tap((numberOfEntries: number) => {
-        this.numberOfEntries = numberOfEntries;
-        console.log(`Nb de participations : ${numberOfEntries}`);
-      })
-    );
+ ngOnInit(): void {
+  const id = Number(this.route.snapshot.paramMap.get('id')); // Récupère l'id de l'URL
 
-    // Récupère l'id via la route et le transforme en number
-    this.countryId = Number(this.route.snapshot.params['id']);
+  // Charge d'abord les données !
+  this.olympicService.loadInitialData().subscribe({
+    next: () => {
+      // Ensuite on peut chercher le pays
+      this.countryDetails$ = this.olympicService.getOlympicById(id).pipe(
+        tap(country => {
+          if (!country) {
+            console.warn('⛔ No country found, redirecting to /404...');
+            this.router.navigate(['/404']);
+          }
+        })
+      );
 
-    // Charger les détails du pays et sinon 404
-    this.countryDetails$! = this.olympicService.getOlympicById(this.countryId).pipe(
-      tap(country => {
-        console.log("🔍 Pays trouvé :", country);
-      }),
-      // map(country => {
-      //   if (!country) {
-      //     console.warn("⛔ Aucun pays trouvé, redirection...");
-      //     this.router.navigate(['/404']); 
-      //     return null;
-      //   }
-      //   return country;
-      // })
-    );
+      // Calculer le nombre total d'athlètes par pays
+      this.numberOfAthletes$ = this.countryDetails$.pipe(
+        map(country => country ? country.participations.reduce((sum, participation) => sum + participation.athleteCount, 0) : 0)
+      );
 
-    // Calculer le nombre total d'athlètes par pays
-    this.numberOfAthletes$ = this.countryDetails$.pipe(
-      map(country => country ? country.participations.reduce((sum, participation) => sum + participation.athleteCount, 0) : 0)
-    );
+      // Calculer le nombre total de medailles par pays
+      this.numberOfMedals$ = this.countryDetails$.pipe(
+        map(country => country ? country.participations.reduce((sum, participation) => sum + participation.medalsCount, 0) : 0)
+      );
 
-    // Calculer le nombre total de medailles par pays
-    this.numberOfMedals$ = this.countryDetails$.pipe(
-      map(country => country ? country.participations.reduce((sum, participation) => sum + participation.medalsCount, 0) : 0)
-    );
-
-    // Calculer le nombre total de medailles par pays
-    this.numberOfEntriesForCountry$ = this.countryDetails$.pipe(
-      map(country => country ? country.participations.length : 0)
-    );
-  }
+      // Calculer le nombre total de medailles par pays
+      this.numberOfEntriesForCountry$ = this.countryDetails$.pipe(
+        map(country => country ? country.participations.length : 0)
+      );
+    },
+    error: () => {
+      console.error('💥 Failed to load data');
+      this.router.navigate(['/404']);
+    }
+  });
+}
 
   // Revient à la page précédente
   goBack(): void {

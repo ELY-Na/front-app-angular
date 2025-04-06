@@ -38,7 +38,7 @@ export class ChartComponent implements OnInit, OnDestroy {
       data: {
         labels: labels, // Utilisation des labels dynamiques
         datasets: [{
-          label: 'Medal per country',
+          label: '🏅Medal per country',
           data: values, // Utilisation des valeurs dynamiques
           borderWidth: 1,
           backgroundColor: ['red', 'blue', 'yellow', 'green', 'purple']
@@ -48,6 +48,15 @@ export class ChartComponent implements OnInit, OnDestroy {
         responsive: true,
         layout: {
           padding: 20
+        },
+        plugins:{
+          legend: {
+            labels: {
+              font: {
+                size: 20
+              }
+            }
+          }
         },
         onClick: (event, elements) => {
           if (elements.length > 0) {
