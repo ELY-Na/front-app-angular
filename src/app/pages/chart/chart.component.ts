@@ -41,7 +41,7 @@ export class ChartComponent implements OnInit, OnDestroy {
           label: '🏅Medal per country',
           data: values, // Utilisation des valeurs dynamiques
           borderWidth: 1,
-          backgroundColor: ['red', 'blue', 'yellow', 'green', 'purple']
+          backgroundColor: ['#956165', '#7a3e52', '#89a2dc', '#9781a1', '#bfe1f1', '#b8cbe8']
         }]
       },
       options: {
@@ -88,6 +88,5 @@ export class ChartComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe(); // Désabonnement propre
-    console.log('ChartComponent détruit, abonnement nettoyé.');
   }
 }

@@ -70,7 +70,6 @@ export class CountryChartComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe(); // Désabonnement propre
-    console.log('ChartComponent détruit, abonnement nettoyé.');
+    this.subscription.unsubscribe(); // Désabonnement propre, ChartComponent détruit
   }
 }

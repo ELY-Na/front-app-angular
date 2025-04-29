@@ -25,20 +25,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.olympicService.getNumberOfParticipations().subscribe((maxParticipations: number) => {
         this.maxParticipations = maxParticipations;
-        console.log(`Max participations : ${maxParticipations}`);
       })
     );
 
     this.subscription.add(
       this.olympicService.getNumBerOfCountries().subscribe((allCountries: number) => {
         this.allCountries = allCountries;
-        console.log(`All Countries: ${allCountries}`)
       })
     );
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe(); // Désabonnement
-    console.log('HomeComponent détruit, abonnement nettoyé.');
+    this.subscription.unsubscribe(); // Désabonnement, HomeComponent détruit
   }
 }

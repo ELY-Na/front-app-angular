@@ -85,7 +85,6 @@ export class OlympicService {
   getOlympicById(countryId: number): Observable<Olympic | null> {
     return this.getOlympics().pipe( // Remplace par ta vraie méthode
       map((data: Olympic[]) => {
-        console.log("📊 Liste complète des pays :", data);
         return data.find(country => country.id === countryId) || null;
       })
     );

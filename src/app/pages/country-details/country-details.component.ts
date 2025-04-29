@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
-// import { catchError} from 'rxjs/operators';
 
 @Component({
   selector: 'app-country-details',
@@ -32,43 +31,43 @@ export class CountryDetailsComponent implements OnInit, OnDestroy{
     private router: Router
   ) {}
 
- ngOnInit(): void {
-  const id = Number(this.route.snapshot.paramMap.get('id')); // Récupère l'id de l'URL
+  ngOnInit(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id')); // Récupère l'id de l'URL
 
-  // Charge d'abord les données !
-  this.olympicService.loadInitialData().subscribe({
-    next: () => {
-      // Ensuite on peut chercher le pays
-      this.countryDetails$ = this.olympicService.getOlympicById(id).pipe(
-        tap(country => {
-          if (!country) {
-            console.warn('⛔ No country found, redirecting to /404...');
-            this.router.navigate(['/404']);
-          }
-        })
-      );
+    // Charge d'abord les données !
+    this.olympicService.loadInitialData().subscribe({
+      next: () => {
+        // Ensuite on peut chercher le pays
+        this.countryDetails$ = this.olympicService.getOlympicById(id).pipe(
+          tap(country => {
+            if (!country) {
+              console.warn('⛔ No country found, redirecting to /404...');
+              this.router.navigate(['/404']);
+            }
+          })
+        );
 
-      // Calculer le nombre total d'athlètes par pays
-      this.numberOfAthletes$ = this.countryDetails$.pipe(
-        map(country => country ? country.participations.reduce((sum, participation) => sum + participation.athleteCount, 0) : 0)
-      );
+        // Calculer le nombre total d'athlètes par pays
+        this.numberOfAthletes$ = this.countryDetails$.pipe(
+          map(country => country ? country.participations.reduce((sum, participation) => sum + participation.athleteCount, 0) : 0)
+        );
 
-      // Calculer le nombre total de medailles par pays
-      this.numberOfMedals$ = this.countryDetails$.pipe(
-        map(country => country ? country.participations.reduce((sum, participation) => sum + participation.medalsCount, 0) : 0)
-      );
+        // Calculer le nombre total de medailles par pays
+        this.numberOfMedals$ = this.countryDetails$.pipe(
+          map(country => country ? country.participations.reduce((sum, participation) => sum + participation.medalsCount, 0) : 0)
+        );
 
-      // Calculer le nombre total de medailles par pays
-      this.numberOfEntriesForCountry$ = this.countryDetails$.pipe(
-        map(country => country ? country.participations.length : 0)
-      );
-    },
-    error: () => {
-      console.error('💥 Failed to load data');
-      this.router.navigate(['/404']);
-    }
-  });
-}
+        // Calculer le nombre total de entrées par pays
+        this.numberOfEntriesForCountry$ = this.countryDetails$.pipe(
+          map(country => country ? country.participations.length : 0)
+        );
+      },
+      error: () => {
+        console.error('💥 Failed to load data');
+        this.router.navigate(['/404']);
+      }
+    });
+  }
 
   // Revient à la page précédente
   goBack(): void {
@@ -77,14 +76,6 @@ export class CountryDetailsComponent implements OnInit, OnDestroy{
     
   // Désabonnement
   ngOnDestroy(): void {
-    this.subscription.unsubscribe(); 
-    console.log('CountryDetailsComponent détruit, abonnement nettoyé.');
+    this.subscription.unsubscribe(); // CountryDetailsComponent détruit, abonnement nettoyé
   }
 }
-
-// créer nouveau chart details component
-// créer le chart
-// créer le lien entre home et pays
-// refacto les methodes dans service
-
-// page 404 => chargement des data se fait plusieurs fois, la première fois ne fonctionne pas car pas le temps de charger les data
